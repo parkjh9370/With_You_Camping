@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const mypageController = require('../controllers/mypage');
 
-
 // 회원 정보 가져오기
 router.get('/', mypageController.get);
 // 내 정보 수정하기

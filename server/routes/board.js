@@ -15,5 +15,3 @@ router.put('/:id', boardController.put);
 router.delete('/:id', boardController.remove);
 
 module.exports = router;
-
-

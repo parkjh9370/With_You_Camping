@@ -1,26 +1,26 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const morgan = require("morgan");
-const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
-const indexRouter = require("./routes/index");
-const { sequelize } = require("./models");
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
+const indexRouter = require('./routes/index');
+const { sequelize } = require('./models');
 dotenv.config();
 const app = express();
 
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("데이터베이스 연결 성공");
+    console.log('데이터베이스 연결 성공');
   })
-  .catch((err) => {
+  .catch(err => {
     console.error(err);
   });
 
 const corsOption = {
   // origin: 'http://debugnote-client.s3-website.ap-northeast-2.amazonaws.com',
-  origin: "*",
+  origin: '*',
   // optionsSuccessStatus: 200,
   credentials: true, // allow the Access-Control-Allow-Credentials
   // withcredentials: true, // allow the Access-Control-Allow-Credentials
@@ -32,18 +32,18 @@ app.use(express.json({}));
 app.use(
   express.urlencoded({
     extended: false,
-  })
+  }),
 );
 app.use(cookieParser());
 app.use(helmet());
 
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 
-app.use("/", indexRouter);
+app.use('/', indexRouter);
 
 // http://15.164.104.171/
-app.get("/api", (req, res) => {
-  res.send("서버 연결 테스트");
+app.get('/api', (req, res) => {
+  res.send('서버 연결 테스트');
 });
 
 // 지원하지 않는 api
