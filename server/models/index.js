@@ -1,9 +1,12 @@
 const Sequelize = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config.js')[env];
-// const User = require('./user');
-// const Board = require('./board');
-// const Comment = require('./comment');
+const User = require('./user');
+const Board = require('./board');
+const BoardData = require('./boardData');
+const Comment = require('./comment');
+const Like = require('./like');
+
 
 const db = {};
 const sequelize = new Sequelize(
@@ -15,16 +18,22 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 
-// db.User = User;
-// db.Board = Board;
-// db.Comment = Comment;
+db.User = User;
+db.Board = Board;
+db.BoardData = BoardData
+db.Comment = Comment;
+db.Like = Like;
 
-// User.init(sequelize);
-// Board.init(sequelize);
-// Comment.init(sequelize);
+User.init(sequelize);
+Board.init(sequelize);
+BoardData.init(sequelize);
+Comment.init(sequelize);
+Like.init(sequelize);
 
-// User.associate(db);
-// Board.associate(db);
-// Comment.associate(db);
+User.associate(db);
+Board.associate(db);
+BoardData.associate(db);
+Comment.associate(db);
+Like.associate(db);
 
 module.exports = db;
