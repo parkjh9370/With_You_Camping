@@ -1,7 +1,7 @@
+const User = require('../models/user');
 const Board = require('../models/board');
 const Comment = require('../models/comment');
-const User = require('../models/user');
-const Like = require('../models/like')
+const Like = require('../models/like');
 const SQ = require('sequelize');
 const SequelModel = SQ.Sequelize;
 require('dotenv').config();
@@ -72,12 +72,15 @@ module.exports = {
     });
 
     // const LikeBoard = await Like.findAll({});
-    // 게시글 북마크 갯수 및 항목
+    // 게시글 북마크 불러오기
     const LikeBoard = await Like.findAll({
       where: {
         BoardId: id,
       },
     });
+    // 북마크 갯수
+    const LikeCount = LikeBoard.length;
+
 
     // 유저의 해당 게시글 북마크 여부
     const checkLike = await Like.findOne({
@@ -95,7 +98,7 @@ module.exports = {
     return res.status(200).json({
       board,
       comment,
-      LikeBoard,
+      LikeCount,
       isBoardLike,
       message: '게시물을 가져왔습니다.',
     });
