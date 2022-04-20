@@ -20,11 +20,6 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(255),
           allowNull: true,
         },
-        job: {
-          type: Sequelize.STRING(50),
-          allowNull: true,
-          defaultValue: '개발자',
-        },
         provider: {
           type: Sequelize.STRING(10),
           allowNull: false,
@@ -42,7 +37,7 @@ module.exports = class User extends Sequelize.Model {
         underscored: false,
         modelName: 'User',
         tableName: 'users',
-        paranoid: true,
+        paranoid: false,
         // mb4 -> 이모티콘도 사용 가능
         charset: 'utf8mb4',
         collate: 'utf8mb4_general_ci',
