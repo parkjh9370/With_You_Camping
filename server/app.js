@@ -8,7 +8,7 @@ const indexRouter = require('./routes/index');
 const { sequelize } = require('./models');
 dotenv.config();
 const app = express();
-    
+
 sequelize
   .sync({ force: false })
   .then(() => {
