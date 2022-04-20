@@ -6,11 +6,11 @@ module.exports = class Board extends Sequelize.Model {
       {
         title: {
           type: Sequelize.STRING(100),
-          allowNull: true,
+          allowNull: false,
         },
         content: {
             type: Sequelize.TEXT,
-            allowNull: true,
+            allowNull: false,
           },
         picture: {
           type: Sequelize.STRING(255),
@@ -44,7 +44,7 @@ module.exports = class Board extends Sequelize.Model {
       onDelete: 'CASCADE',
     });
     db.Board.belongsToMany(db.User, {
-      through: 'like',
+      through: 'Like',
       onDelete: 'CASCADE',
     });
   }

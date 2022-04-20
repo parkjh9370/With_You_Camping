@@ -44,7 +44,7 @@ module.exports = class User extends Sequelize.Model {
       },
     );
   }
- 
+
   static associate(db) {
     db.User.hasMany(db.Board, {
       onDelete: 'CASCADE',
@@ -53,7 +53,7 @@ module.exports = class User extends Sequelize.Model {
       onDelete: 'CASCADE',
     });
     db.User.belongsToMany(db.Board, {
-      through: 'like',
+      through: 'Like',
       onDelete: 'CASCADE',
     });
   }

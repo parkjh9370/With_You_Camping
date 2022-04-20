@@ -22,7 +22,7 @@ module.exports = {
       return res.status(400).json({ message: '비밀번호가 일치하지 않습니다.' });
     }
 
-    res.status(201).json({ message: '비밀번호가 일치합니다' });
+    res.status(201).json({ message: '유저정보 수정 및 탈퇴가 가능합니다' });
   },
   // 유저 정보
   get: async (req, res) => {
