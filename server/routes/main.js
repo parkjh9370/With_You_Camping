@@ -9,6 +9,6 @@ router.get('/', mainController.list);
 router.get('/search', mainController.search);
 
 // 인기순 정렬 (최근 일주일 간)
-router.get('/ranking', mainController.rank);
+router.get('/rank', mainController.rank);
 
 module.exports = router;

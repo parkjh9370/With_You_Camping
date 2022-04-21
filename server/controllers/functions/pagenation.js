@@ -37,6 +37,7 @@ module.exports = {
     }
     return counting;
   },
+  // 장소 검색
   searchSite: async (option, page, limit) => {
     return await Board.findAndCountAll({
       order: [['id', 'desc']],
