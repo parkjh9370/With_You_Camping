@@ -19,10 +19,8 @@ sequelize
   });
 
 const corsOption = {
-  // origin: 'http://debugnote-client.s3-website.ap-northeast-2.amazonaws.com',
   origin: '*',
   credentials: true, // allow the Access-Control-Allow-Credentials
-  // withcredentials: true, // allow the Access-Control-Allow-Credentials
 };
 
 app.use(cors(corsOption));

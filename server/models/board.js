@@ -9,17 +9,21 @@ module.exports = class Board extends Sequelize.Model {
           allowNull: false,
         },
         content: {
-            type: Sequelize.TEXT,
-            allowNull: false,
-          },
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
         picture: {
           type: Sequelize.STRING(255),
           allowNull: true,
         },
         siteInfo: {
-            type: Sequelize.STRING(255),
-            allowNull: true,
-          },
+          type: Sequelize.STRING(255),
+          allowNull: true,
+        },
+        site: {
+          type: Sequelize.STRING(50),
+          allowNull: false,
+        },
       },
       {
         sequelize,
@@ -38,8 +42,8 @@ module.exports = class Board extends Sequelize.Model {
   static associate(db) {
     db.Board.belongsTo(db.User);
     db.Board.hasMany(db.BoardData, {
-        onDelete: 'cascade',
-      });
+      onDelete: 'cascade',
+    });
     db.Board.hasMany(db.Comment, {
       onDelete: 'CASCADE',
     });

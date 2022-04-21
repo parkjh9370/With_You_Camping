@@ -16,6 +16,7 @@ module.exports = {
       content,
       picture,
       siteInfo,
+      site,
       wifi,
       hotWater,
       parking,
@@ -29,6 +30,7 @@ module.exports = {
       content,
       picture,
       siteInfo,
+      site,
     });
 
     const boardData = await BoardData.create({
@@ -40,13 +42,11 @@ module.exports = {
       toiletType,
     });
 
-    res
-      .status(203)
-      .json({
-        boardId: board.id,
-        boardDataId: boardData.id,
-        message: '게시물이 생성 되었습니다.',
-      });
+    res.status(203).json({
+      boardId: board.id,
+      boardDataId: boardData.id,
+      message: '게시물이 생성 되었습니다.',
+    });
   },
   // 상세 게시글 정보
   get: async (req, res) => {
@@ -64,6 +64,7 @@ module.exports = {
         'content',
         'picture',
         'siteInfo',
+        'site',
         'createdAt',
         'updatedAt',
         'userId',
@@ -151,6 +152,7 @@ module.exports = {
       content,
       picture,
       siteInfo,
+      site,
       wifi,
       hotWater,
       parking,
@@ -175,6 +177,7 @@ module.exports = {
         content,
         picture,
         siteInfo,
+        site,
       },
       {
         where: {
@@ -183,17 +186,20 @@ module.exports = {
       },
     );
 
-    await BoardData.update({
-      wifi,
-      hotWater,
-      parking,
-      electricity,
-      toiletType
-    },{
-      where: {
-        boardId: id
-      }
-    })
+    await BoardData.update(
+      {
+        wifi,
+        hotWater,
+        parking,
+        electricity,
+        toiletType,
+      },
+      {
+        where: {
+          boardId: id,
+        },
+      },
+    );
 
     res.status(200).json({ message: '게시물이 수정 되었습니다' });
   },

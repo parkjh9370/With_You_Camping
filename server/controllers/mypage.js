@@ -2,7 +2,6 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const { hashPassword } = require('./functions/security');
 
-
 module.exports = {
   // 비밀번호 확인
   confirmPassword: async (req, res) => {

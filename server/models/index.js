@@ -7,7 +7,6 @@ const BoardData = require('./boarddata');
 const Comment = require('./comment');
 const Like = require('./like');
 
-
 const db = {};
 const sequelize = new Sequelize(
   config.database,
@@ -20,7 +19,7 @@ db.sequelize = sequelize;
 
 db.User = User;
 db.Board = Board;
-db.BoardData = BoardData
+db.BoardData = BoardData;
 db.Comment = Comment;
 db.Like = Like;
 
