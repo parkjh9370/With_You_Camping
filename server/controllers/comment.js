@@ -16,7 +16,7 @@ module.exports = {
 
     res
       .status(200)
-      .json({ comment: newComment, message: '댓글이 추가되었습니다' });
+      .json({ comment: newComment.id, message: '댓글이 추가되었습니다' });
   },
   get: async (req, res) => {
     const boardId = parseInt(req.query.boardId)
@@ -62,7 +62,7 @@ module.exports = {
       return res.status(400).json({ message: '유저가 일치하지 않습니다.' });
     }
 
-    const updateComment = await Comment.update(
+    await Comment.update(
       {
         comment: comment,
       },
