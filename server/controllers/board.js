@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Board = require('../models/board');
+const BoardData = require('../models/boarddata');
 const Comment = require('../models/comment');
 const Like = require('../models/like');
 const SQ = require('sequelize');
@@ -10,7 +11,17 @@ module.exports = {
   // 게시글 등록
   post: async (req, res) => {
     // 제목, 내용 필수값
-    const { title, content, picture, siteInfo } = req.body;
+    const {
+      title,
+      content,
+      picture,
+      siteInfo,
+      wifi,
+      hotWater,
+      parking,
+      electricity,
+      toiletType,
+    } = req.body;
 
     const board = await Board.create({
       UserId: req.userId,
@@ -20,14 +31,28 @@ module.exports = {
       siteInfo,
     });
 
+    const boardData = await BoardData.create({
+      BoardId: board.dataValues.id,
+      wifi,
+      hotWater,
+      parking,
+      electricity,
+      toiletType,
+    });
+
     res
       .status(203)
-      .json({ boardId: board.id, message: '게시물이 생성 되었습니다.' });
+      .json({
+        boardId: board.id,
+        boardDataId: boardData.id,
+        message: '게시물이 생성 되었습니다.',
+      });
   },
   // 상세 게시글 정보
   get: async (req, res) => {
     const { id } = req.params;
 
+    // 게시물 가져오기
     const board = await Board.findOne({
       where: {
         id: id,
@@ -51,6 +76,21 @@ module.exports = {
       ],
     });
 
+    // 게시물 옵션 가져오기
+    const boardData = await BoardData.findOne({
+      attributes: [
+        'id',
+        'wifi',
+        'hotWater',
+        'parking',
+        'electricity',
+        'toiletType',
+      ],
+      where: {
+        BoardId: id,
+      },
+    });
+
     const comment = await Comment.findAll({
       where: {
         BoardId: id,
@@ -71,7 +111,6 @@ module.exports = {
       ],
     });
 
-    // const LikeBoard = await Like.findAll({});
     // 게시글 북마크 불러오기
     const LikeBoard = await Like.findAll({
       where: {
@@ -79,8 +118,7 @@ module.exports = {
       },
     });
     // 북마크 갯수
-    const LikeCount = LikeBoard.length;
-
+    const likeCount = LikeBoard.length;
 
     // 유저의 해당 게시글 북마크 여부
     const checkLike = await Like.findOne({
@@ -97,8 +135,9 @@ module.exports = {
 
     return res.status(200).json({
       board,
+      boardData,
       comment,
-      LikeCount,
+      likeCount,
       isBoardLike,
       message: '게시물을 가져왔습니다.',
     });
@@ -107,7 +146,17 @@ module.exports = {
   put: async (req, res) => {
     // 게시글 PK
     const { id } = req.params;
-    const { title, content, picture, siteInfo } = req.body;
+    const {
+      title,
+      content,
+      picture,
+      siteInfo,
+      wifi,
+      hotWater,
+      parking,
+      electricity,
+      toiletType,
+    } = req.body;
 
     const findBoard = await Board.findByPk(id);
 
@@ -133,6 +182,18 @@ module.exports = {
         },
       },
     );
+
+    await BoardData.update({
+      wifi,
+      hotWater,
+      parking,
+      electricity,
+      toiletType
+    },{
+      where: {
+        boardId: id
+      }
+    })
 
     res.status(200).json({ message: '게시물이 수정 되었습니다' });
   },

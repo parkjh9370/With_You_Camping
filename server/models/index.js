@@ -3,7 +3,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config.js')[env];
 const User = require('./user');
 const Board = require('./board');
-const BoardData = require('./boardData');
+const BoardData = require('./boarddata');
 const Comment = require('./comment');
 const Like = require('./like');
 
