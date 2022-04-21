@@ -19,7 +19,7 @@ module.exports = {
       .json({ comment: newComment.id, message: '댓글이 추가되었습니다' });
   },
   get: async (req, res) => {
-    const boardId = parseInt(req.query.boardId)
+    const boardId = parseInt(req.query.boardId);
 
     const nowComment = await Comment.findAll({
       order: [['createdAt', 'desc']],
@@ -103,8 +103,6 @@ module.exports = {
       },
     });
 
-    res
-      .status(200)
-      .json({ message: '댓글을 삭제했습니다.' });
+    res.status(200).json({ message: '댓글을 삭제했습니다.' });
   },
 };

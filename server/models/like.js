@@ -25,7 +25,7 @@ module.exports = class Like extends Sequelize.Model {
   }
 
   static associate(db) {
-    db.Comment.belongsTo(db.User);
-    db.Comment.belongsTo(db.Board);
+    db.Like.belongsTo(db.User);
+    db.Like.belongsTo(db.Board);
   }
 };
