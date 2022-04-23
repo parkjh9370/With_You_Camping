@@ -8,7 +8,7 @@ module.exports = {
     pages = Number(req.query.pages || 1);
 
     const boards = await pagenation.getBoards(pages, limit);
-
+ 
     // 좋아요 갯수 추가하기
     const boardsId = boards.rows.map(board => {
       return board.id;
