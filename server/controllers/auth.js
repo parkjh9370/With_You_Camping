@@ -1,10 +1,11 @@
-const { User } = require('../models');
+const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const {
   generateAccessToken,
   sendToken,
   checkToken,
   generateRefreshToken,
+  verifyToken,
 } = require('./functions/jwtToken');
 const { hashPassword } = require('./functions/security');
 
@@ -40,7 +41,7 @@ module.exports = {
   // 로그인
   login: async (req, res, next) => {
     const { email, password } = req.body;
-    console.log(email, password)
+    // console.log(email, password)
     try {
       const userInfo = await User.findOne({ where: { email } });
 
@@ -53,7 +54,7 @@ module.exports = {
       const match = await bcrypt.compare(
         password,
         userInfo.dataValues.password,
-      ); 
+      );
       if (!match) {
         return res.status(401).json({
           success: false,
@@ -62,9 +63,15 @@ module.exports = {
       }
       delete userInfo.dataValues.password;
 
+      console.log(userInfo.dataValues.id);
+
       const accessToken = generateAccessToken(userInfo.dataValues.id);
-      const refreshToken = generateRefreshToken();
-      sendToken(res, accessToken, refreshToken);
+      const refreshToken = generateRefreshToken(userInfo.dataValues.id);
+      res.cookie("refreshToken", refreshToken, {
+				httpOnly: true,
+				path: "/api/auth/token",
+				maxAge: 60 * 60 * 24 * 7,
+			});
       res.status(200).json({ userId: userInfo.id, accessToken });
     } catch (err) {
       console.error(err);
@@ -109,6 +116,44 @@ module.exports = {
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error!' });
+    }
+  },
+  validateToken: async (req, res) => {
+    const { token } = req.body;
+    // console.log(token) 
+    if (!token) { 
+      res.status(400).json({ meesage: 'not exists token' });
+    } else {
+      const data = verifyToken(token, 'accessToken');
+      // console.log(data)
+      if (data === 'fail') {
+        res.status(200).json({
+          valid: false,
+          message: 'success',
+        });
+      } else {
+        res.status(200).json({
+          valid: true,
+          message: 'success',
+        });
+      }
+    }
+  },
+  refreshToken: async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      res.status(400).json({ message: 'fail : require refresh token' });
+    } else {
+      const data = verifyToken(refreshToken, 'refreshToken');
+      if (data === 'fail') {
+        res.status(400).json({ message: 'fail : invalid refresh token' });
+      } else {
+        const accessToken = generateToken({ data }, 'accessToken');
+        res.json({
+          accessToken,
+          message: 'success',
+        });
+      }
     }
   },
 };

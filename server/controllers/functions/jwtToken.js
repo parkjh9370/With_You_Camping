@@ -1,16 +1,17 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
 
-module.exports = {
+module.exports = {  
   // Access token으로 sign
   generateAccessToken: data => {
-    return jwt.sign(data, config.jwt.accessSecretKey, {
-      expiresIn: config.jwt.expiresInSec, // 3시간
+    // console.log(data)
+    return jwt.sign({data}, config.jwt.accessSecretKey, {
+      expiresIn: '3h', // 3시간
     });
   },
   generateRefreshToken: () => {
     return jwt.sign({}, config.jwt.accessSecretKey, {
-      expiresIn: config.jwt.expiresInSec, // 3일
+      expiresIn: '1d', // 1일
     });
   },
   // JWT 토큰을 쿠키로 전달
@@ -29,4 +30,17 @@ module.exports = {
       return null;
     }
   },
+  verifyToken: (token, type) => {
+    try {
+      if (type === "accessToken") {
+        const data = jwt.verify(token, config.jwt.accessSecretKey);
+        return data;
+      } else if (type === "refreshToken") {
+        const data = jwt.verify(token, config.jwt.refreshSecretKey);
+        return data;
+      }
+    } catch (error) {
+      return "fail";
+    }
+  }
 };

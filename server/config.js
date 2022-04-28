@@ -15,7 +15,8 @@ module.exports = {
         jwt: {
             accessSecretKey: required('ACCESS_SECRET'),
             refreshSecretKey: required('REFRESH_SECRET'),
-            expiresInSec: parseInt(required('JWT_EXPIRES_SEC', 86400)),
+            expiresInSec: parseInt(required('JWT_EXPIRES_SEC', 21600)), // 6시간
+            expiresInSecRefresh: parseInt(required('JWT_EXPIRES_SEC', 172800)), // 2일
         },
         bcrypt: {
             saltRounds: parseInt(required('BCRYPT_SALT_ROUNDS', 12)),
@@ -36,6 +37,7 @@ module.exports = {
             region: required('AWS_REGION')
         },
         kakao: {
-            loginSecretKey: required('KAKAO_LOGIN_KEY')
+            clientID: required('KAKAO_CLIENT_ID'),
+            redirectURI: required('KAKAO_REDIRECT_URI')
         }
     }
