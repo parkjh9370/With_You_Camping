@@ -1,16 +1,16 @@
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const config = require('../../config');
 
 module.exports = {
   // Access token으로 sign
   generateAccessToken: data => {
-    return jwt.sign(data, process.env.ACCESS_SECRET, {
-      expiresIn: '3h',
+    return jwt.sign(data, config.jwt.accessSecretKey, {
+      expiresIn: config.jwt.expiresInSec, // 3시간
     });
-  }, 
+  },
   generateRefreshToken: () => {
-    return jwt.sign({}, process.env.ACCESS_SECRET, {
-      expiresIn: '14d',
+    return jwt.sign({}, config.jwt.accessSecretKey, {
+      expiresIn: config.jwt.expiresInSec, // 3일
     });
   },
   // JWT 토큰을 쿠키로 전달
@@ -24,7 +24,7 @@ module.exports = {
   // JWT 토큰 정보를 받아서 검증
   checkToken: token => {
     try {
-      return jwt.verify(token, process.env.ACCESS_SECRET);
+      return jwt.verify(token, config.jwt.accessSecretKey);
     } catch (err) {
       return null;
     }

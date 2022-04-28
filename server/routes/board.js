@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const isAuth = require('../middlewares/auth');
 const boardController = require('../controllers/board');
-const dotenv = require('dotenv');
-dotenv.config();
+const config = require('../config')
 
 // 게시물 작성
 router.post('/', isAuth, boardController.post);
@@ -23,9 +22,9 @@ const AWS = require('aws-sdk');
 const multerS3 = require('multer-s3');
 
 const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESSKEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESSKEY,
-    region: process.env.AWS_REGION,
+    accessKeyId: config.AWS.accessId,
+    secretAccessKey: config.AWS.secretKey,
+    region: config.AWS.region,
 })
 
 const upload = multer({
@@ -46,6 +45,7 @@ const upload = multer({
 
 // 이미지 업로드 요청
 router.post('/img', upload.single('file'), async (req, res) => {
+    console.log(req.file)
     console.log(req.file.location)
     res.status(200).json({ location: req.file.location })
 });

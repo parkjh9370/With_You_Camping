@@ -40,6 +40,7 @@ module.exports = {
   // 로그인
   login: async (req, res, next) => {
     const { email, password } = req.body;
+    console.log(email, password)
     try {
       const userInfo = await User.findOne({ where: { email } });
 
@@ -52,7 +53,7 @@ module.exports = {
       const match = await bcrypt.compare(
         password,
         userInfo.dataValues.password,
-      );
+      ); 
       if (!match) {
         return res.status(401).json({
           success: false,
@@ -61,10 +62,10 @@ module.exports = {
       }
       delete userInfo.dataValues.password;
 
-      const newAccessToken = generateAccessToken(userInfo.dataValues);
-      const newRefreshToken = generateRefreshToken();
-      sendToken(res, newAccessToken, newRefreshToken);
-      res.status(200).json({ userInfo, newAccessToken });
+      const accessToken = generateAccessToken(userInfo.dataValues.id);
+      const refreshToken = generateRefreshToken();
+      sendToken(res, accessToken, refreshToken);
+      res.status(200).json({ userId: userInfo.id, accessToken });
     } catch (err) {
       console.error(err);
       next(err);
