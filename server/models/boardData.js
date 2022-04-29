@@ -4,25 +4,25 @@ module.exports = class BoardData extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        wifi: {
-          type: Sequelize.BOOLEAN,
-          allowNull: true,
+        area: {
+          type: Sequelize.STRING,
+          allowNull: false,
         },
-        hotWater: {
-          type: Sequelize.BOOLEAN,
-          allowNull: true,
+        wifi: {
+          type: Sequelize.STRING,
+          allowNull: false,
         },
         parking: {
-          type: Sequelize.BOOLEAN,
-          allowNull: true,
+          type: Sequelize.STRING,
+          allowNull: false,
         },
         electricity: {
-          type: Sequelize.BOOLEAN,
-          allowNull: true,
+          type: Sequelize.STRING,
+          allowNull: false,
         },
         toiletType: {
-          type: Sequelize.BOOLEAN,
-          allowNull: true,
+          type: Sequelize.STRING,
+          allowNull: false,
         },
       },
       {

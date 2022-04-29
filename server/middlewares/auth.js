@@ -1,28 +1,40 @@
-const { User } = require('../models');
-const { checkToken } = require('../controllers/functions/jwtToken');
-
-require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const config = require('../config')
 
 module.exports = async (req, res, next) => {
-  // console.log('cookies:', req.cookies);
-  const { accessToken, refreshToken } = req.cookies;
-  if (!accessToken || !refreshToken) {
-    return res.status(401).json({ message: 'Token error!' });
+  // console.log(req.cookies)
+  // console.log(typeof req.headers.cookies)
+  let token;
+  // 토큰이 헤더로 전달되었을 때
+  const authHeader = req.get('Authorization');
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
   }
-  // 에세스 토큰이 유효한지 확인.
-  const accessTokenData = checkToken(accessToken);
-  const refreshTokenData = checkToken(refreshToken);
-  if (accessTokenData === null) {
-    if (refreshTokenData === undefined) {
-      return res.status(401).json({ message: 'Not invalid token error!' });
+
+  // 토큰이 쿠키로 전달되었을 때
+  if (!token) {
+    token = req.cookies['token'];
+  }
+
+  // console.log(token);
+
+  if (!token) {
+    return res.status(401).json({ message: '유저가 아닙니다.' });
+  }
+
+  jwt.verify(token, config.jwt.accessSecretKey, async (error, decoded) => {
+    if (error) {
+      return res.status(401).json({ message: '인증되지 않은 토큰입니다.' });
     }
-  }
-  // 에세스 토큰 정보가 유효한지 확인.
-  const { email } = accessTokenData;
-  const userInfo = await User.findOne({ where: { email } });
-  if (!userInfo) {
-    return res.status(401).json({ message: 'Not signed user!' });
-  }
-  req.userId = userInfo.id;
-  next();
+    // console.log(decoded.data)
+    const user = await User.findByPk(decoded.data);
+    if (!user) {
+      return res.status(401).json({ message: '인증되지 않았습니다.' });
+    }
+    req.userId = user.id; // req.customData
+    // console.log(req.userId)
+    req.token = token;
+    next();
+  });
 };

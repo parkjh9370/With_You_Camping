@@ -15,7 +15,7 @@ module.exports = {
         client_id: config.kakao.clientID,
         redirect_uri: config.kakao.redirectURI,
         // 클라이언트에서 받은 인가 코드
-        code: req.query.code,
+        code: req.query.code, 
       };
 
       const url = `https://kauth.kakao.com/oauth/token?code=${oauthData.code}&client_id=${oauthData.client_id}&redirect_uri=${oauthData.redirect_uri}&grant_type=${oauthData.grant_type}`;

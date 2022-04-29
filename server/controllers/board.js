@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Board = require('../models/board');
 const BoardData = require('../models/boarddata');
+const Locate = require('../models/locate');
 const Comment = require('../models/comment');
 const Like = require('../models/like');
 const SQ = require('sequelize');
@@ -10,43 +11,45 @@ require('dotenv').config();
 module.exports = {
   // 게시글 등록
   post: async (req, res) => {
-    // 제목, 내용 필수값
-    const {
-      title,
-      content,
-      picture,
-      siteInfo,
-      site,
-      wifi,
-      hotWater,
-      parking,
-      electricity,
-      toiletType,
-    } = req.body;
+    try {
+      const { title, content, picture, location, siteInfo, rating } = req.body;
 
-    const board = await Board.create({
-      UserId: req.userId,
-      title,
-      content,
-      picture,
-      siteInfo,
-      site,
-    });
+      console.log(title)
+      console.log(content)
+      console.log(picture)
+      console.log(location)
+      console.log(siteInfo)
+      console.log(rating)
 
-    const boardData = await BoardData.create({
-      BoardId: board.dataValues.id,
-      wifi,
-      hotWater,
-      parking,
-      electricity,
-      toiletType,
-    });
+      const board = await Board.create({
+        UserId: req.userId,
+        title,
+        content,
+        picture,
+        rating: parseInt(rating),
+      });
 
-    res.status(203).json({
-      boardId: board.id,
-      boardDataId: boardData.id,
-      message: '게시물이 생성 되었습니다.',
-    });
+      await BoardData.create({
+        BoardId: board.dataValues.id,
+        area: siteInfo.area,
+        wifi: siteInfo.internet,
+        parking: siteInfo.parking,
+        electricity: siteInfo.electronic,
+        toiletType: siteInfo.toilet,
+      });
+
+      await Locate.create({
+        BoardId: board.dataValues.id,
+        latitude: location.latitude,
+        longtitude: location.longitude,
+        roadAdd: location.roadAdd,
+        lotAdd: location.lotAdd,
+      });
+
+      res.status(203).json({ message: '게시물 생성이 완료되었습니다.' });
+    } catch (err) {
+      console.log(err);
+    }
   },
   // 상세 게시글 정보
   get: async (req, res) => {

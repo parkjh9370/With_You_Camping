@@ -16,14 +16,10 @@ module.exports = class Board extends Sequelize.Model {
           type: Sequelize.STRING(255),
           allowNull: true,
         },
-        siteInfo: {
-          type: Sequelize.STRING(255),
-          allowNull: true,
-        },
-        site: {
-          type: Sequelize.STRING(50),
+        rating: {
+          type: Sequelize.INTEGER,
           allowNull: false,
-        },
+        }
       },
       {
         sequelize,
@@ -53,6 +49,6 @@ module.exports = class Board extends Sequelize.Model {
     db.Board.belongsToMany(db.User, {
       through: 'Like',
       onDelete: 'CASCADE',
-    });
+    }); 
   }
 };

@@ -10,7 +10,7 @@ module.exports = class Locate extends Sequelize.Model {
         },
         longtitude: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: true,
         },
         roadAdd: {
           type: Sequelize.STRING,
