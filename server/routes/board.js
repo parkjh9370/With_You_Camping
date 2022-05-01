@@ -8,7 +8,7 @@ const config = require('../config')
 router.post('/', isAuth, boardController.post);
 
 // 게시물 상세 가져오기
-router.get('/detail/:id', isAuth, boardController.get);
+router.get('/:id', boardController.get);
 
 // 게시물 수정
 router.put('/:id', isAuth, boardController.put);

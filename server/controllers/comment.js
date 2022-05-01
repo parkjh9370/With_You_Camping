@@ -5,26 +5,26 @@ const SequelModel = SQ.Sequelize;
 
 module.exports = {
   post: async (req, res) => {
-    const boardId = parseInt(req.query.boardId);
+    const {id} = req.params;
     const { comment } = req.body;
 
-    const newComment = await Comment.create({
+    await Comment.create({
       UserId: req.userId,
-      BoardId: boardId,
+      BoardId: id,
       comment: comment,
     });
 
-    res
-      .status(200)
-      .json({ comment: newComment.id, message: '댓글이 추가되었습니다' });
+    res.status(200).json({ message: '댓글이 추가되었습니다' });
   },
   get: async (req, res) => {
-    const boardId = parseInt(req.query.boardId);
+    const { id } = req.params;
+
+    console.log(id);
 
     const nowComment = await Comment.findAll({
       order: [['createdAt', 'desc']],
       where: {
-        BoardId: boardId,
+        BoardId: id,
       },
       attributes: [
         'id',
@@ -32,6 +32,7 @@ module.exports = {
         'createdAt',
         'updatedAt',
         [SequelModel.col('User.nickname'), 'nickname'],
+        [SequelModel.col('User.id'), 'userId'],
       ],
       include: [
         {
@@ -46,15 +47,14 @@ module.exports = {
       .json({ comment: nowComment, message: '현재 게시글의 댓글 입니다.' });
   },
   put: async (req, res) => {
-    const boardId = parseInt(req.query.boardId);
-    const commentId = parseInt(req.query.commentId);
+    // commentId
+    const { id } = req.params
     const { comment } = req.body;
 
     const findComment = await Comment.findOne({
       where: {
-        id: commentId,
+        id: id,
         UserId: req.userId,
-        BoardId: boardId,
       },
     });
 
@@ -68,26 +68,24 @@ module.exports = {
       },
       {
         where: {
-          id: commentId,
+          id: id,
           UserId: req.userId,
-          BoardId: boardId,
         },
       },
     );
 
     res
       .status(200)
-      .json({ comment: `${commentId}`, message: '댓글이 수정되었습니다' });
+      .json({ message: '댓글이 수정되었습니다' });
   },
   remove: async (req, res) => {
-    const boardId = parseInt(req.query.boardId);
-    const commentId = parseInt(req.query.commentId);
+
+    const { id } = req.params
 
     const findComment = await Comment.findOne({
       where: {
-        id: commentId,
+        id: id,
         UserId: req.userId,
-        BoardId: boardId,
       },
     });
 
@@ -97,9 +95,8 @@ module.exports = {
 
     await Comment.destroy({
       where: {
-        id: commentId,
+        id: id,
         UserId: req.userId,
-        BoardId: boardId,
       },
     });
 

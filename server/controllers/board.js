@@ -14,13 +14,6 @@ module.exports = {
     try {
       const { title, content, picture, location, siteInfo, rating } = req.body;
 
-      console.log(title)
-      console.log(content)
-      console.log(picture)
-      console.log(location)
-      console.log(siteInfo)
-      console.log(rating)
-
       const board = await Board.create({
         UserId: req.userId,
         title,
@@ -46,7 +39,12 @@ module.exports = {
         lotAdd: location.lotAdd,
       });
 
-      res.status(203).json({ message: '게시물 생성이 완료되었습니다.' });
+      res 
+        .status(203)
+        .json({
+          boardId: board.dataValues.id,
+          message: '게시물 생성이 완료되었습니다.',
+        });
     } catch (err) {
       console.log(err);
     }
@@ -54,6 +52,7 @@ module.exports = {
   // 상세 게시글 정보
   get: async (req, res) => {
     const { id } = req.params;
+    console.log(id);
 
     // 게시물 가져오기
     const board = await Board.findOne({
@@ -66,8 +65,7 @@ module.exports = {
         'title',
         'content',
         'picture',
-        'siteInfo',
-        'site',
+        'rating',
         'createdAt',
         'updatedAt',
         'userId',
@@ -82,38 +80,42 @@ module.exports = {
 
     // 게시물 옵션 가져오기
     const boardData = await BoardData.findOne({
-      attributes: [
-        'id',
-        'wifi',
-        'hotWater',
-        'parking',
-        'electricity',
-        'toiletType',
-      ],
+      attributes: ['area', 'wifi', 'parking', 'electricity', 'toiletType'],
       where: {
         BoardId: id,
       },
     });
 
-    const comment = await Comment.findAll({
+    // 위치 정보
+    const locate = await Locate.findOne({
+      attributes: ['latitude', 'longtitude', 'roadAdd', 'lotAdd'],
       where: {
         BoardId: id,
       },
-      attributes: [
-        'id',
-        'comment',
-        'createdAt',
-        'updatedAt',
-        [SequelModel.col('User.nickname'), 'nickname'],
-        [SequelModel.col('User.id'), 'userId'],
-      ],
-      include: [
-        {
-          model: User,
-          attributes: [],
-        },
-      ],
     });
+
+    locate.dataValues.latitude = parseFloat(locate.dataValues.latitude);
+    locate.dataValues.longtitude = parseFloat(locate.dataValues.longtitude);
+
+    // const comment = await Comment.findAll({
+    //   where: {
+    //     BoardId: id,
+    //   },
+    //   attributes: [
+    //     'id',
+    //     'comment',
+    //     'createdAt',
+    //     'updatedAt',
+    //     [SequelModel.col('User.nickname'), 'nickname'],
+    //     [SequelModel.col('User.id'), 'userId'],
+    //   ],
+    //   include: [
+    //     {
+    //       model: User,
+    //       attributes: [],
+    //     },
+    //   ],
+    // });
 
     // 게시글 북마크 불러오기
     const LikeBoard = await Like.findAll({
@@ -125,24 +127,25 @@ module.exports = {
     const likeCount = LikeBoard.length;
 
     // 유저의 해당 게시글 북마크 여부
-    const checkLike = await Like.findOne({
-      where: {
-        UserId: req.userId,
-        BoardId: id,
-      },
-    });
-    let isBoardLike = false;
+    // const checkLike = await Like.findOne({
+    //   where: {
+    //     UserId: req.userId,
+    //     BoardId: id,
+    //   },
+    // });
+    // let isBoardLike = false;
     // 유저가 북마크 안했으면 false, 했으면 true
-    if (checkLike) {
-      isBoardLike = true;
-    }
+    // if (checkLike) {
+    //   isBoardLike = true;
+    // }
 
     return res.status(200).json({
       board,
       boardData,
-      comment,
+      locate,
+      // comment,
       likeCount,
-      isBoardLike,
+      // isBoardLike,
       message: '게시물을 가져왔습니다.',
     });
   },
@@ -150,18 +153,15 @@ module.exports = {
   put: async (req, res) => {
     // 게시글 PK
     const { id } = req.params;
-    const {
-      title,
-      content,
-      picture,
-      siteInfo,
-      site,
-      wifi,
-      hotWater,
-      parking,
-      electricity,
-      toiletType,
-    } = req.body;
+    const { title, content, picture, location, siteInfo, rating } = req.body;
+
+    console.log(id);
+    console.log(title);
+    console.log(content);
+    console.log(picture);
+    console.log(location);
+    console.log(siteInfo);
+    console.log(rating);
 
     const findBoard = await Board.findByPk(id);
 
@@ -179,8 +179,8 @@ module.exports = {
         title,
         content,
         picture,
-        siteInfo,
-        site,
+        rating: parseInt(rating),
+        UserId: req.userId,
       },
       {
         where: {
@@ -191,11 +191,11 @@ module.exports = {
 
     await BoardData.update(
       {
-        wifi,
-        hotWater,
-        parking,
-        electricity,
-        toiletType,
+        area: siteInfo.area,
+        wifi: siteInfo.internet,
+        parking: siteInfo.parking,
+        electricity: siteInfo.electronic,
+        toiletType: siteInfo.toilet,
       },
       {
         where: {
@@ -203,6 +203,17 @@ module.exports = {
         },
       },
     );
+
+    await Locate.update({
+      latitude: location.latitude,
+      longtitude: location.longitude,
+      roadAdd: location.roadAdd,
+      lotAdd: location.lotAdd,
+    },{
+      where: {
+        boardId: id,
+      },
+    })
 
     res.status(200).json({ message: '게시물이 수정 되었습니다' });
   },
