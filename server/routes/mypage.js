@@ -12,7 +12,6 @@ router.put('/', isAuth, mypageController.put);
 // 회원 탈퇴하기
 router.delete('/', isAuth, mypageController.withdrwal);
 
-
 // 마이페이지 게시글 불러오기
 router.get('/boards', isAuth, mypageController.board);
 // 마에페이지 좋아요 글 불러오기

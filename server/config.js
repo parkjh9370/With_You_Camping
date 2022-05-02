@@ -39,5 +39,14 @@ module.exports = {
         kakao: {
             clientID: required('KAKAO_CLIENT_ID'),
             redirectURI: required('KAKAO_REDIRECT_URI')
+        },
+        google: {
+            clientId: required('GOOGLE_CLIENTID'),
+            password:   required('GOOGLE_PASSWORD'),
+            redirectURI: required('GOOGLE_REDIRECT_URI')
+        },
+        naver: {
+            clientId: required('NAVER_CLIENT_ID'),
+            clientSecret: required('NAVER_CLIENT_SECRET'),
         }
     }
