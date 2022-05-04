@@ -54,6 +54,7 @@ module.exports = {
       });
       // console.log(userInfo.data)
       const userId = userInfo[0].dataValues.id;
+      const nickname = userInfo[0].dataValues.nickname;
       // console.log(userId)
 
       const accessToken = generateAccessToken(userId);
@@ -65,7 +66,7 @@ module.exports = {
         maxAge: 60 * 60 * 24 * 7,
       });
 
-      res.status(200).json({ userId: userId, accessToken });
+      res.status(200).json({ userId: userId, nickname: nickname, accessToken });
     } catch (err) {
       console.error(err);
     }
@@ -98,6 +99,7 @@ module.exports = {
     // console.log(userInfo.data)
     const userId = userInfo[0].dataValues.id;
     // console.log(userId)
+    const nickname = userInfo[0].dataValues.nickname;
 
     const accessToken = generateAccessToken(userId);
     const refreshToken = generateRefreshToken(userId);
@@ -108,7 +110,7 @@ module.exports = {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    res.status(200).json({ userId: userId, accessToken });
+    res.status(200).json({ userId: userId, nickname:nickname, accessToken });
   },
 
   naver: async (req, res) => {
@@ -135,7 +137,7 @@ module.exports = {
       },
     );
 
-    console.log(naverUserInfo.data);
+    // console.log(naverUserInfo.data);
 
     const { nickname, email } = naverUserInfo.data.response;
 
@@ -146,9 +148,10 @@ module.exports = {
         snsId: email,
       },
     });
-    // // console.log(userInfo.data)
+
     const userId = userInfo[0].dataValues.id;
-    // // console.log(userId)
+    const userNickname = userInfo[0].dataValues.nickname;
+
 
     const accessToken = generateAccessToken(userId);
     const refreshToken = generateRefreshToken(userId);
@@ -159,6 +162,6 @@ module.exports = {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    res.status(200).json({ userId: userId, accessToken });
+    res.status(200).json({ userId: userId, nickname:userNickname, accessToken });
   },
 };

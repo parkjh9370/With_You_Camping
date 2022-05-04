@@ -23,6 +23,8 @@ const corsOption = {
   credentials: true, // allow the Access-Control-Allow-Credentials
 };
 
+
+
 app.use(cors(corsOption));
 // app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json({}));
@@ -31,7 +33,7 @@ app.use(
     extended: false,
   }),
 );
-app.use(cookieParser());
+app.use(cookieParser()); 
 app.use(helmet());
 
 app.use(morgan('dev'));

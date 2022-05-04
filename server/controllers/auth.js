@@ -63,8 +63,6 @@ module.exports = {
       }
       delete userInfo.dataValues.password;
 
-      console.log(userInfo.dataValues.id);
-
       const accessToken = generateAccessToken(userInfo.dataValues.id);
       const refreshToken = generateRefreshToken(userInfo.dataValues.id);
       res.cookie("refreshToken", refreshToken, {
@@ -72,7 +70,7 @@ module.exports = {
 				path: "/api/auth/token",
 				maxAge: 60 * 60 * 24 * 7,
 			});
-      res.status(200).json({ userId: userInfo.id, accessToken });
+      res.status(200).json({ userId: userInfo.id, nickname: userInfo.nickname, accessToken });
     } catch (err) {
       console.error(err);
       next(err);
