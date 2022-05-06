@@ -7,9 +7,9 @@ module.exports = {
   // 유저 닉네임
   get: async (req, res) => {
     const { id } = req.params;
- 
+  
     if (req.userId != id) {
-      return res.status(400).json({ message: '유저가 일치하지 않습니다.' });
+      return res.status(400).json({ message: 'get 유저가 일치하지 않습니다.' });
     }
 
     const user = await User.findOne({
@@ -109,12 +109,12 @@ module.exports = {
   board: async (req, res) => {
     const { pages, limit } = req.query;
     const userId = req.userId;
-
+ 
     const boards = await pagenation.myBoards(userId, pages, limit);
 
     const boardsId = boards.rows.map(board => {
       return board.id;
-    });
+    }); 
 
     const countLike = await pagenation.countLike(boardsId);
 
@@ -139,7 +139,7 @@ module.exports = {
     const boards = await pagenation.myLikes(userId, pages, limit);
 
     const boardsId = boards.rows.map(board => {
-      return board.id;
+      return board.Board.id;
     });
 
     const countLike = await pagenation.countLike(boardsId);
@@ -154,7 +154,7 @@ module.exports = {
 
     return res.status(200).json({
       boards,
-      message: '내가 쓴 게시물을 불러왔습니다,',
+      message: '내가 좋아요 한 게시물을 불러왔습니다,',
     });
   },
 };

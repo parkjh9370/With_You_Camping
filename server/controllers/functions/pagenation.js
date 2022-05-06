@@ -1,6 +1,7 @@
 const User = require('../../models/user');
 const Board = require('../../models/board');
 const Like = require('../../models/like');
+const Comment = require('../../models/comment');
 const sequelize = require('sequelize');
 const Op = sequelize.Op;
 
@@ -18,6 +19,16 @@ module.exports = {
         'site',
         'createdAt',
         'UserId',
+      ],
+      include: [
+        {
+          model: Comment,
+          attributes: ['comment'],
+        },
+        {
+          model: User,
+          attributes: ['nickname'],
+        },
       ],
       limit: Number(limit), // 갯수
       offset: (page - 1) * 10, // 1페이지 15 ~ 6 -> 5 ~ 1
@@ -83,31 +94,52 @@ module.exports = {
       where: {
         UserId: userId,
       },
+      include: [
+        {
+          model: Comment,
+          attributes: ['comment'],
+        },
+        {
+          model: User,
+          attributes: ['nickname'],
+        },
+      ],
       limit: Number(limit),
       offset: (page - 1) * 10, // 1페이지 15 ~ 6 -> 5 ~ 1
     });
   },
-  // 내가 북마크 한 글
-  myBookmarks: async (userId, page, limit) => {
-    return await User.findAndCountAll({
-      attributes: ['id'],
+  // 내가 좋아요 한  글
+  myLikes: async (userId, page, limit) => {
+    return await Like.findAndCountAll({
+      order: [['id', 'desc']],
       where: {
-        id: userId,
+        UserId: userId,
       },
+      attributes: ['id'],
       // join 문
       include: [
         {
           model: Board,
-          through: {
-            attributes: ['createdAt'],
-          },
-          // order: [[db.sequelize.models.Bookmark, 'createdAt', 'desc']],
+          attributes: [
+            'id',
+            'title',
+            'content',
+            'picture',
+            'createdAt',
+            'userId',
+          ],
+          include: [
+            {
+              model: Comment,
+              attributes: ['comment'],
+            },
+          ],
         },
       ],
       limit: Number(limit), // 한 페이지에 몇개를 보여줄 것인가
       // 시작점 1페이지 = 0 / 2페이지  = 10 / 3페이지 = 20
       offset: (page - 1) * 10,
-      subQuery: false,
+      // subQuery: false,
     });
   },
 };

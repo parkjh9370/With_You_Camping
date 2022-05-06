@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
   const authHeader = req.get('Authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
     token = authHeader.split(' ')[1];
-  }
+  } 
 
   // 토큰이 쿠키로 전달되었을 때
   if (!token) {
