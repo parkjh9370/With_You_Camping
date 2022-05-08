@@ -8,7 +8,4 @@ router.get('/', mainController.list);
 // 지역, 제목, 내용 검색
 router.get('/search', mainController.search);
 
-// 인기순 정렬 (최근 일주일 간)
-router.get('/rank', mainController.rank);
-
 module.exports = router;

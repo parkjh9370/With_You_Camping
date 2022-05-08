@@ -54,6 +54,6 @@ app.use((error, req, res, next) => {
   res.sendStatus(500);
 });
 
-app.listen(8000, () => {
-  console.log(`8000번 포트에서 대기중`);
+app.listen(8080, () => {
+  console.log(`8080번 포트에서 대기중`);
 });

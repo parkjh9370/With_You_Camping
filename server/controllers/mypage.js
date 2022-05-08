@@ -2,7 +2,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const pagenation = require('./functions/pagenation');
 const { hashPassword } = require('./functions/security');
-
+ 
 module.exports = {
   // 유저 닉네임
   get: async (req, res) => {
@@ -107,9 +107,9 @@ module.exports = {
 
   // 유저가 작성한 게시글 내려주기
   board: async (req, res) => {
+
     const { pages, limit } = req.query;
     const userId = req.userId;
- 
     const boards = await pagenation.myBoards(userId, pages, limit);
 
     const boardsId = boards.rows.map(board => {
@@ -117,6 +117,7 @@ module.exports = {
     }); 
 
     const countLike = await pagenation.countLike(boardsId);
+    
 
     for (let i = 0; i < boardsId.length; i++) {
       boards.rows[i].dataValues['totalLike'] = countLike[i];
