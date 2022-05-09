@@ -51,12 +51,19 @@ module.exports = {
         {
           nickname,
         },
-        {
+        { 
           where: { id: req.userId },
         },
       );
 
-      return res.status(200).json({ message: '닉네임이 수정되었습니다.' });
+      const userInfo = await User.findOne({
+        attributes: ['id', 'email', 'nickname', 'profile', 'provider', 'snsId'],
+        where: {
+          id: req.userId,
+        },
+      });
+
+      return res.status(200).json({ userInfo, message: '닉네임이 수정되었습니다.' });
     }
 
     // 비밀번호 변경 요청
@@ -111,6 +118,8 @@ module.exports = {
     const { pages, limit } = req.query;
     const userId = req.userId;
     const boards = await pagenation.myBoards(userId, pages, limit);
+
+    console.log(boards)
 
     const boardsId = boards.rows.map(board => {
       return board.id;

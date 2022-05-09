@@ -118,21 +118,33 @@ module.exports = {
   },
   validateToken: async (req, res) => {
     const { token } = req.body;
+
+    // const userInfo = await User.findOne 
+
     // console.log(token) 
     if (!token) { 
       res.status(400).json({ meesage: 'not exists token' });
     } else {
       const data = verifyToken(token, 'accessToken');
-      // console.log(data)
+      console.log(data.data)
+
+      const userInfo = await User.findOne({
+        attributes: ['id','email','nickname','profile','provider','snsId'],
+        where: {
+          id: data.data
+        }
+      })
       if (data === 'fail') {
         res.status(200).json({
           valid: false,
           message: 'success',
+          userInfo
         });
       } else {
         res.status(200).json({
           valid: true,
           message: 'success',
+          userInfo
         });
       }
     }

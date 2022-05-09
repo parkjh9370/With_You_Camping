@@ -155,14 +155,6 @@ module.exports = {
     const { id } = req.params;
     const { title, content, picture, location, siteInfo, rating } = req.body;
 
-    console.log(id);
-    console.log(title);
-    console.log(content);
-    console.log(picture);
-    console.log(location);
-    console.log(siteInfo);
-    console.log(rating);
-
     const findBoard = await Board.findByPk(id);
 
     if (findBoard.UserId != req.userId) {

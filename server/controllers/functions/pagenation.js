@@ -144,7 +144,6 @@ module.exports = {
   },
   // 내가 쓴 글 조회
   myBoards: async (userId, page, limit) => {
-    console.log('3333333333333333');
     return await Board.findAndCountAll({
       order: [['id', 'desc']],
       where: {

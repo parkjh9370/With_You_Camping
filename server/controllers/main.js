@@ -5,7 +5,7 @@ module.exports = {
   list: async (req, res) => {
     let { pages, limit, category } = req.query;
     pages = Number(req.query.pages || 1);
-
+ 
     if (category === '전체') {
       const boards = await pagenation.getAllBoards(pages, limit);
 
@@ -32,7 +32,7 @@ module.exports = {
       const boardsId = boards.rows.map(board => {
         return board.id;
       });
-
+      
       const countLike = await pagenation.countLike(boardsId);
 
       for (let i = 0; i < boardsId.length; i++) {
@@ -81,6 +81,7 @@ module.exports = {
       return res.status(200).json({ message: '카테고리를 선택해주세요' });
     }
   },
+
   search: async (req, res) => {
     const { searchType, input, pages, limit } = req.query;
 
