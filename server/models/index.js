@@ -9,12 +9,15 @@ const Comment = require('./comment');
 const Like = require('./like');
 
 const db = {};
+
 const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
   config,
 );
+
+console.log(config)
 
 db.sequelize = sequelize;
 

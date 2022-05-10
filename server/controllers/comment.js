@@ -33,6 +33,7 @@ module.exports = {
         'updatedAt',
         [SequelModel.col('User.nickname'), 'nickname'],
         [SequelModel.col('User.id'), 'userId'],
+        [SequelModel.col('User.profile'), 'profile']
       ],
       include: [
         {

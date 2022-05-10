@@ -9,15 +9,11 @@ const { sequelize } = require('./models');
 dotenv.config();
 const app = express();
 
-sequelize
-  .sync({ force: false })
-  .then(() => {
-    console.log('데이터베이스 연결 성공');
-  })
-  .catch(err => {
-    console.error(err);
-  });
+app.set('port', process.env.PORT || 8080);
 
+app.use(morgan('dev'));
+
+app.use(morgan('dev'));
 const corsOption = {
   origin: '*',
   credentials: true, // allow the Access-Control-Allow-Credentials
@@ -25,20 +21,38 @@ const corsOption = {
 
 app.use(cors(corsOption));
 // app.use('/img', express.static(path.join(__dirname, 'uploads')));
-app.use(express.json({}));
+app.use(express.json());
 app.use(
   express.urlencoded({
     extended: false,
   }),
 );
-app.use(cookieParser()); 
+app.use(cookieParser());
 app.use(helmet());
 
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'production') {
+  sequelize
+    .sync({ force: false })
+    .then(() => {
+      console.log('RDS DB 연결 성공');
+    })
+    .catch(err => {
+      console.error(err);
+    });
+} else {
+  sequelize
+    .sync({ force: false })
+    .then(() => {
+      console.log('Local DB 연결 성공');
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
 
 app.use('/', indexRouter);
 
-// http://15.164.104.171/
+// http://15.164.104.171
 app.get('/api', (req, res) => {
   res.send('서버 연결 테스트');
 });
@@ -54,6 +68,8 @@ app.use((error, req, res, next) => {
   res.sendStatus(500);
 });
 
-app.listen(8080, () => {
-  console.log(`8080번 포트에서 대기중`);
+
+// "start": "NODE_ENV=production PORT=8000 pm2 start app.js -i 0",
+app.listen(app.get('port'), () => {
+  console.log(app.get('port'), `포트에서 대기중`);
 });

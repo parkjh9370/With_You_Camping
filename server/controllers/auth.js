@@ -120,7 +120,7 @@ module.exports = {
     const { token } = req.body;
 
     // const userInfo = await User.findOne 
-
+  
     // console.log(token) 
     if (!token) { 
       res.status(400).json({ meesage: 'not exists token' });

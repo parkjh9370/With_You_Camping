@@ -26,10 +26,16 @@ module.exports = {
         },
         db: {
             host: parseInt(required('DB_HOST')),
-            port: parseInt(required('DB_PORT')),
             username: required('DB_USER'),
             database: required('DB_DATABASE'),
             password: required('DB_PASSWORD'),
+        },
+        rds: {
+            host: required('RDS_HOST'),
+            username: required('RDS_USER'),
+            database: required('RDS_DATABASE'),
+            password: required('RDS_PASSWORD'),
+            port: parseInt(required('RDS_PORT')),
         },
         AWS: {
             accessId: required('AWS_ACCESSKEY_ID'),
