@@ -14,5 +14,5 @@ services:
           - /app/node_modules/bcrypt/
 
 # 도커 컨테이너 실행 시
-# package.json / script: "start": "NODE_ENV=production node app.js " 수정
+# package.json / script: "start": "NODE_ENV=production nodemon app.js " 수정
 # docker-compose up 명령어 입력

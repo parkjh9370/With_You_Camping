@@ -62,6 +62,7 @@ module.exports = {
       attributes: [
         'id',
         [SequelModel.col('User.nickname'), 'nickname'],
+        [SequelModel.col('User.profile'), 'profile'],
         'title',
         'content',
         'picture',

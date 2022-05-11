@@ -17,8 +17,6 @@ const sequelize = new Sequelize(
   config,
 );
 
-console.log(config)
-
 db.sequelize = sequelize;
 
 db.User = User;

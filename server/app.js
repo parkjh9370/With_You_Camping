@@ -15,7 +15,7 @@ app.use(morgan('dev'));
 
 app.use(morgan('dev'));
 const corsOption = {
-  origin: '*',
+  origin: '*',  
   credentials: true, // allow the Access-Control-Allow-Credentials
 };
 

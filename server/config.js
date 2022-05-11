@@ -12,7 +12,7 @@ function required(key, defaultValue = undefined) {
 }
  
 module.exports = {
-        jwt: {
+        jwt: {  
             accessSecretKey: required('ACCESS_SECRET'),
             refreshSecretKey: required('REFRESH_SECRET'),
             expiresInSec: parseInt(required('JWT_EXPIRES_SEC', 21600)), // 6시간
