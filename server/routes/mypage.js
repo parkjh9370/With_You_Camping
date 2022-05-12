@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mypageController = require('../controllers/mypage');
 const isAuth = require('../middlewares/auth');
-
+ 
 // 마이페이지 게시글 불러오기
 router.get('/boards', isAuth, mypageController.board);
 // 마에페이지 좋아요 글 불러오기

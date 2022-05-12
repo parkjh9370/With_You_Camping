@@ -9,7 +9,7 @@ module.exports = {
     const { id } = req.params;
   
     if (req.userId != id) {
-      return res.status(400).json({ message: 'get 유저가 일치하지 않습니다.' });
+      return res.status(400).json({ message: '유저가 일치하지 않습니다.' });
     }
 
     const user = await User.findOne({
@@ -71,7 +71,7 @@ module.exports = {
       const userFind = await User.findByPk(req.userId);
 
       if (!userFind) {
-        return res.status(400).json({ message: '유저가 존재 하지 않습니다.' });
+        return res.status(400).json({ message: '회원정보 수정이 실패하였습니다.' });
       }
 
       const isValidPassword = await bcrypt
@@ -99,7 +99,7 @@ module.exports = {
       return res.status(200).json({ message: '비밀번호가 수정되었습니다.' });
     }
 
-    res.status(404).json({ message: '회원정보 수정이 실패하였습니다.' });
+    res.status(400).json({ message: '회원정보 수정이 실패하였습니다.' });
   },
   // 회원 탈퇴
   withdrwal: async (req, res) => {
@@ -118,9 +118,7 @@ module.exports = {
     const { pages, limit } = req.query;
     const userId = req.userId;
     const boards = await pagenation.myBoards(userId, pages, limit);
-
-    console.log(boards)
-
+ 
     const boardsId = boards.rows.map(board => {
       return board.id;
     }); 

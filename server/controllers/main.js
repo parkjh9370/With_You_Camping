@@ -8,7 +8,7 @@ module.exports = {
  
     if (category === '전체') {
       const boards = await pagenation.getAllBoards(pages, limit);
-
+ 
       // 좋아요 갯수 추가하기
       const boardsId = boards.rows.map(board => {
         return board.id;
@@ -52,12 +52,11 @@ module.exports = {
         message: `좋아요 순으로 게시물들을 가져왔습니다.`,
       });
     } else if (category) {
-      // console.log(category);
+
       const boards = await pagenation.getCategoryBoards(category, pages, limit);
 
       let boardsData = boards.rows.map(index => index.Board);
 
-      // console.log(boardsData)
       const setBoards = { count: boards.count, rows: boardsData };
       const boardsId = setBoards.rows.map(board => {
         return board.id;
@@ -85,8 +84,6 @@ module.exports = {
   search: async (req, res) => {
     const { searchType, input, pages, limit } = req.query;
 
-    console.log(searchType, input, pages, limit);
-
     // 제목 검색
     if (searchType === 'title') {
       const boards = await pagenation.searchTitle(input, pages, limit);
@@ -104,7 +101,7 @@ module.exports = {
 
       return res
         .status(201)
-        .json({ boards, message: '제목 검색에 성공 했습니다.' });
+        .json({ boards, message: '제목 검색 결과 게시글 입니다' });
     }
 
     // // 내용 검색
@@ -124,7 +121,7 @@ module.exports = {
 
       return res
         .status(201)
-        .json({ boards, message: '제목 검색에 성공 했습니다.' });
+        .json({ boards, message: '내용 검색 결과 게시물입니다.' });
     }
 
     res.status(401).json({ message: '제목 및 내용 검색에 실패하였습니다' });

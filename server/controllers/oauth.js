@@ -52,17 +52,16 @@ module.exports = {
           snsId: getKakaoUserInfo.data.kakao_account.email,
         },
       });
-      // console.log(userInfo.data)
+
       const userId = userInfo[0].dataValues.id;
       const nickname = userInfo[0].dataValues.nickname;
-      // console.log(userId)
 
       const accessToken = generateAccessToken(userId);
       const refreshToken = generateRefreshToken(userId);
 
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: '/api/auth/token',
+        path: '/auth/token',
         maxAge: 60 * 60 * 24 * 7,
       });
 
@@ -81,7 +80,7 @@ module.exports = {
     }
     const { OAuth2Client } = require('google-auth-library');
     const client = new OAuth2Client(config.google.clientId);
-    console.log(client);
+
     const googleUser = await client.verifyIdToken({
       idToken: code,
       audience: config.google.clientId,
@@ -96,9 +95,9 @@ module.exports = {
         snsId: payload.email,
       },
     });
-    // console.log(userInfo.data)
+
     const userId = userInfo[0].dataValues.id;
-    // console.log(userId)
+
     const nickname = userInfo[0].dataValues.nickname;
 
     const accessToken = generateAccessToken(userId);
@@ -106,7 +105,7 @@ module.exports = {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      path: '/api/auth/token',
+      path: '/auth/token',
       maxAge: 60 * 60 * 24 * 7,
     });
 
@@ -137,7 +136,7 @@ module.exports = {
       },
     );
 
-    // console.log(naverUserInfo.data);
+
 
     const { nickname, email } = naverUserInfo.data.response;
 
@@ -158,7 +157,7 @@ module.exports = {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      path: '/api/auth/token',
+      path: '/auth/token',
       maxAge: 60 * 60 * 24 * 7,
     });
 

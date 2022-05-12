@@ -5,9 +5,6 @@ module.exports = {
   get: async (req, res) => {
     const { id } = req.params;
 
-    console.log(id)
-    console.log(req.userId)
-
     let like = false
     const islike = await Like.findOne({
       where: {
@@ -17,7 +14,6 @@ module.exports = {
     })
 
     if (islike) {
-      console.log('dd')
       like = true
     }
 

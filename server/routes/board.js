@@ -46,8 +46,7 @@ const upload = multer({
 
 // 이미지 업로드 요청
 router.post('/img', upload.single('file'), async (req, res) => {
-  // console.log(req.file)
-  // console.log(req.file.location)
+
   res.status(200).json({ location: req.file.location });
 });
 

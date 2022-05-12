@@ -4,7 +4,7 @@ const config = require('../../config');
 module.exports = {  
   // Access token으로 sign
   generateAccessToken: data => {
-    // console.log(data)
+
     return jwt.sign({data}, config.jwt.accessSecretKey, {
       expiresIn: '3h', // 3시간
     });

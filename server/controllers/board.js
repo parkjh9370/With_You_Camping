@@ -52,7 +52,7 @@ module.exports = {
   // 상세 게시글 정보
   get: async (req, res) => {
     const { id } = req.params;
-    console.log(id);
+
 
     // 게시물 가져오기
     const board = await Board.findOne({
@@ -124,7 +124,8 @@ module.exports = {
         BoardId: id,
       },
     });
-    // 북마크 갯수
+
+    // 좋아요 갯수
     const likeCount = LikeBoard.length;
 
     // 유저의 해당 게시글 북마크 여부

@@ -31,24 +31,22 @@ module.exports = {
         nickname,
         name,
       });
-      return res.status(201).send('ok');
+      return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
     } catch (error) {
       console.error(error);
       next(error);
     }
   },
-
   // 로그인
   login: async (req, res, next) => {
     const { email, password } = req.body;
-    // console.log(email, password)
     try {
       const userInfo = await User.findOne({ where: { email } });
 
       if (!userInfo) {
         return res.status(401).json({
           success: false,
-          message: '이메일 이 존재하지 않습니다.',
+          message: '이메일 혹은 비밀번호가 일치하지 않습니다.',
         });
       }
       const match = await bcrypt.compare(
@@ -58,59 +56,62 @@ module.exports = {
       if (!match) {
         return res.status(401).json({
           success: false,
-          message: '비밀번호가 잘못되었습니다.',
+          message: '이메일 혹은 비밀번호가 일치하지 않습니다.',
         });
       }
       delete userInfo.dataValues.password;
 
       const accessToken = generateAccessToken(userInfo.dataValues.id);
       const refreshToken = generateRefreshToken(userInfo.dataValues.id);
-      res.cookie("refreshToken", refreshToken, {
-				httpOnly: true,
-				path: "/api/auth/token",
-				maxAge: 60 * 60 * 24 * 7,
-			});
-      res.status(200).json({ userId: userInfo.id, nickname: userInfo.nickname, accessToken });
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        path: '/auth/token',
+        maxAge: 60 * 60 * 24 * 7,
+      });
+      res.status(200).json({
+        userId: userInfo.id,
+        accessToken,
+        message: '로그인에 성공했습니다.',
+      });
     } catch (err) {
       console.error(err);
       next(err);
     }
   },
-  token: async (req, res) => {
-    try {
-      // 쿠키에 에세스 토큰이 유무 확인.
-      const { accessToken } = req.cookies;
-      if (!accessToken) {
-        return res.status(401).json({ message: 'Access token not provided!' });
-      }
+  // token: async (req, res) => {
+  //   try {
+  //     // 쿠키에 에세스 토큰이 유무 확인.
+  //     const { accessToken } = req.cookies;
+  //     if (!accessToken) {
+  //       return res.status(401).json({ message: 'Access token not provided!' });
+  //     }
 
-      // 에세스 토큰이 유효한지 확인.
-      const accessTokenData = checkToken(accessToken);
-      if (!accessTokenData) {
-        return res.status(401).json({ message: 'Invalid token!' });
-      }
+  //     // 에세스 토큰이 유효한지 확인.
+  //     const accessTokenData = checkToken(accessToken);
+  //     if (!accessTokenData) {
+  //       return res.status(401).json({ message: 'Invalid token!' });
+  //     }
 
-      // 에세스 토큰 정보가 유효한지 확인.
+  //     // 에세스 토큰 정보가 유효한지 확인.
 
-      const { email } = accessTokenData;
-      const userInfo = await User.findOne({ where: { email } });
-      if (!userInfo) {
-        return res.status(403).json({ message: 'Not authorized!' });
-      }
-      return res.status(200).json(accessTokenData);
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Server error!' });
-    }
-  },
+  //     const { email } = accessTokenData;
+  //     const userInfo = await User.findOne({ where: { email } });
+  //     if (!userInfo) {
+  //       return res.status(403).json({ message: 'Not authorized!' });
+  //     }
+  //     return res.status(200).json(accessTokenData);
+  //   } catch (err) {
+  //     console.error(err);
+  //     return res.status(500).json({ message: 'Server error!' });
+  //   }
+  // },
   // 로그아웃
   signout: async (req, res, next) => {
     try {
       // 로그아웃 할 때는 쿠키를 삭제한다.
       res.clearCookie('refreshToken');
       res.clearCookie('accessToken');
-      // 로그아웃 성공시 200을 보냄.
-      res.status(200).json({ message: 'ok' });
+      res.status(200).json({ message: '로그아웃 되었습니다.' });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Server error!' });
@@ -118,33 +119,28 @@ module.exports = {
   },
   validateToken: async (req, res) => {
     const { token } = req.body;
-
-    // const userInfo = await User.findOne 
-  
-    // console.log(token) 
-    if (!token) { 
+    if (!token) {
       res.status(400).json({ meesage: 'not exists token' });
     } else {
       const data = verifyToken(token, 'accessToken');
-      console.log(data.data)
 
       const userInfo = await User.findOne({
-        attributes: ['id','email','nickname','profile','provider','snsId'],
+        attributes: ['id', 'email', 'nickname', 'profile', 'provider', 'snsId'],
         where: {
-          id: data.data
-        }
-      })
+          id: data.data,
+        },
+      });
       if (data === 'fail') {
         res.status(200).json({
           valid: false,
           message: 'success',
-          userInfo
+          userInfo,
         });
       } else {
         res.status(200).json({
           valid: true,
           message: 'success',
-          userInfo
+          userInfo,
         });
       }
     }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth');
 const isAuth = require('../middlewares/auth');
-
+ 
 // 회원가입
 router.post('/signup', authController.signup);
 

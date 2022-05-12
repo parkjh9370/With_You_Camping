@@ -3,8 +3,7 @@ const User = require('../models/user');
 const config = require('../config')
 
 module.exports = async (req, res, next) => {
-  // console.log(req.cookies)
-  // console.log(typeof req.headers.cookies)
+
   let token;
   // 토큰이 헤더로 전달되었을 때
   const authHeader = req.get('Authorization');
@@ -17,7 +16,7 @@ module.exports = async (req, res, next) => {
     token = req.cookies['token'];
   }
 
-  // console.log(token);
+
 
   if (!token) {
     return res.status(401).json({ message: '유저가 아닙니다.' });
@@ -27,13 +26,13 @@ module.exports = async (req, res, next) => {
     if (error) {
       return res.status(401).json({ message: '인증되지 않은 토큰입니다.' });
     }
-    // console.log(decoded.data)
+
     const user = await User.findByPk(decoded.data);
     if (!user) {
       return res.status(401).json({ message: '인증되지 않았습니다.' });
     }
     req.userId = user.id; // req.customData
-    // console.log(req.userId)
+
     req.token = token;
     next();
   });

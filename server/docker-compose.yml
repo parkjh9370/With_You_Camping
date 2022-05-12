@@ -7,7 +7,7 @@ services:
       container_name: docker_server
       restart: unless-stopped
       ports:
-        - "8080:8080"
+        - "8090:8090"
       volumes: 
           - ./:/app
           - /app/node_modules/

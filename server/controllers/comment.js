@@ -19,8 +19,6 @@ module.exports = {
   get: async (req, res) => {
     const { id } = req.params;
 
-    console.log(id);
-
     const nowComment = await Comment.findAll({
       order: [['createdAt', 'desc']],
       where: {
@@ -101,6 +99,6 @@ module.exports = {
       },
     });
 
-    res.status(200).json({ message: '댓글을 삭제했습니다.' });
+    res.status(200).json({ message: '댓글이 삭제되었습니다.' });
   },
 };
