@@ -126,7 +126,7 @@ module.exports = {
       order: [['id', 'desc']],
       where: {
         content: {
-          [Op.like]: '%' + option + '%', // 내용 검색
+          [Op.like]: '%' + option + '%', 
         },
       },
       attributes: ['id', 'title', 'content', 'picture', 'createdAt', 'UserId'],
@@ -160,10 +160,9 @@ module.exports = {
         },
       ],
       limit: Number(limit),
-      offset: (page - 1) * 12, // 1페이지 15 ~ 6 -> 5 ~ 1
+      offset: (page - 1) * 12, 
     });
   },
-  // 내가 좋아요 한  글
   myLikes: async (userId, page, limit) => {
     return await Like.findAndCountAll({
       order: [['id', 'desc']],
@@ -173,10 +172,6 @@ module.exports = {
       attributes: ['id'],
       // join 문
       include: [
-        {
-          model: User,
-          attributes: ['nickname'],
-        },
         {
           model: Board,
           attributes: [
@@ -192,13 +187,15 @@ module.exports = {
               model: Comment,
               attributes: ['comment'],
             },
+            {
+              model: User,
+              attributes: ['nickname'],
+            },
           ],
         },
       ],
-      limit: Number(limit), // 한 페이지에 몇개를 보여줄 것인가
-      // 시작점 1페이지 = 0 / 2페이지  = 10 / 3페이지 = 20
+      limit: Number(limit), 
       offset: (page - 1) * 12,
-      // subQuery: false,
     });
   },
 };

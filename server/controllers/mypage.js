@@ -143,11 +143,11 @@ module.exports = {
   like: async (req, res) => {
     const { pages, limit } = req.query;
     const userId = req.userId;
-
+ 
     const boards = await pagenation.myLikes(userId, pages, limit);
 
     const boardsId = boards.rows.map(board => {
-      return board.Board.id;
+      return board.Board.id; 
     });
 
     const countLike = await pagenation.countLike(boardsId);

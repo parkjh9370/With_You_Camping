@@ -65,7 +65,7 @@ module.exports = {
       const refreshToken = generateRefreshToken(userInfo.dataValues.id);
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        path: '/auth/token',
+        // path: '/auth/token',
         maxAge: 60 * 60 * 24 * 7,
       });
       res.status(200).json({

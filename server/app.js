@@ -14,11 +14,11 @@ app.set('port', process.env.PORT || 8090);
 app.use(morgan('dev'));
 const corsOption = {
   origin: '*',  
+  // origin: 'https://withyoucamping.link/',  
   credentials: true, // allow the Access-Control-Allow-Credentials
 };
 
 app.use(cors(corsOption));
-// app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -48,10 +48,10 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 
 // http://15.164.104.171
-app.get('/api', (req, res) => {
+app.get('/api/connect', (req, res) => {
   res.send('서버 연결 테스트');
 });
 
