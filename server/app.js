@@ -14,7 +14,7 @@ app.set('port', process.env.PORT || 8090);
 app.use(morgan('dev'));
 const corsOption = {
   origin: '*',  
-  // origin: 'https://withyoucamping.link/',  
+  // origin: 'https://withyoucamping.link',  
   credentials: true, // allow the Access-Control-Allow-Credentials
 };
 
@@ -50,7 +50,6 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use('/api', indexRouter);
 
-// http://15.164.104.171
 app.get('/api/connect', (req, res) => {
   res.send('서버 연결 테스트');
 });
@@ -66,8 +65,6 @@ app.use((error, req, res, next) => {
   res.sendStatus(500);
 });
 
-
-// "start": "NODE_ENV=production PORT=8000 pm2 start app.js -i 0",
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), `포트에서 대기중`);
 });

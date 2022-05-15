@@ -109,7 +109,7 @@ module.exports = {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    res.status(200).json({ userId: userId, nickname:nickname, accessToken });
+    res.status(200).json({ userId: userId, nickname: nickname, accessToken });
   },
 
   naver: async (req, res) => {
@@ -136,10 +136,7 @@ module.exports = {
       },
     );
 
-
-
     const { nickname, email } = naverUserInfo.data.response;
-
     const userInfo = await User.findOrCreate({
       where: {
         nickname: nickname,
@@ -151,7 +148,6 @@ module.exports = {
     const userId = userInfo[0].dataValues.id;
     const userNickname = userInfo[0].dataValues.nickname;
 
-
     const accessToken = generateAccessToken(userId);
     const refreshToken = generateRefreshToken(userId);
 
@@ -161,6 +157,8 @@ module.exports = {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    res.status(200).json({ userId: userId, nickname:userNickname, accessToken });
+    res
+      .status(200)
+      .json({ userId: userId, nickname: userNickname, accessToken });
   },
 };
