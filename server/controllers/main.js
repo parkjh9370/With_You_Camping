@@ -27,8 +27,7 @@ module.exports = {
     } else if (category === '인기순') {
       // createdAt 7일전 이상으로 검색하기
       const boards = await pagenation.getLikeBoards(pages, limit);
-
-      // 좋아요 갯수 추가하기
+      
       const boardsId = boards.rows.map(board => {
         return board.id;
       });
@@ -38,7 +37,7 @@ module.exports = {
       for (let i = 0; i < boardsId.length; i++) {
         boards.rows[i].dataValues['totalLike'] = countLike[i];
       }
-
+ 
       // 좋아요 많은 기준으로 12개의 데이터만 추출
       const boardSort = {
         count: 12,

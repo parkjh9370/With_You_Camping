@@ -67,7 +67,7 @@ module.exports = {
       attributes: ['id', 'title', 'content', 'picture', 'createdAt', 'UserId'],
       where: {
         createdAt: {
-          [Op.gte]: new Date(Date.parse(new Date()) - 7 * 1000 * 60 * 60 * 24),
+          [Op.gte]: new Date(Date.parse(new Date()) - 60 * 1000 * 60 * 60 * 24),
         },
       },
       include: [

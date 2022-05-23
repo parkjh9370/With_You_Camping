@@ -13,8 +13,8 @@ app.set('port', process.env.PORT || 8090);
 
 app.use(morgan('dev'));
 const corsOption = {
-  // origin: '*',  
-  origin: 'https://withyoucamping.link',  
+  origin: '*',  
+  // origin: 'https://withyoucamping.link',  
   credentials: true, // allow the Access-Control-Allow-Credentials
 };
 
