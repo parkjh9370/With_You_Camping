@@ -80,8 +80,6 @@ module.exports = {
           attributes: ['nickname'],
         },
       ],
-      // limit: Number(limit), // 갯수
-      // offset: (page - 1) * 12, // 1페이지 15 ~ 6 -> 5 ~ 1
     });
   },
   // 좋아요 갯수 세기
